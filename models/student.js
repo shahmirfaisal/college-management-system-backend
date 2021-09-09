@@ -3,23 +3,25 @@ const mongoose = require("mongoose");
 const studentSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Please enter the name!"],
   },
   fatherName: {
     type: String,
-    required: true,
+    required: [true, "Please enter the father name!"],
   },
   image: {
     type: String,
-    required: true,
+    required: [true, "Please upload image!"],
   },
   dateOfBirth: {
     type: Date,
-    required: true,
+    required: [true, "Please provide date of birth!"],
   },
   cnic: {
-    type: String,
-    required: true,
+    type: Number,
+    min: [1000000000000, "Enter a valid cnic"],
+    max: [9999999999999, "Enter a valid cnic"],
+    required: [true, "Please provide the cnic!"],
   },
   admissionDate: {
     type: Date,
@@ -27,12 +29,18 @@ const studentSchema = new mongoose.Schema({
   },
   class: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+    required: [true, "Please provide the class!"],
     ref: "Class",
   },
   address: {
     type: String,
-    required: true,
+    required: [true, "Please enter the address!"],
+  },
+  phone: {
+    type: Number,
+    min: [10000000000, "Enter a valid phone number!"],
+    max: [99999999999, "Enter a valid phone number!"],
+    required: [true, "Please provide the phone number!"],
   },
 });
 

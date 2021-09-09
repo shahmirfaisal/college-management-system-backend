@@ -30,6 +30,17 @@ exports.createClass = async (req, res, next) => {
       teacher,
     });
     await newClass.save();
+    if (teacher) {
+      const newTeacher = await Teacher.findById(teacher);
+      if (newTeacher.class) {
+        const oldClass = await Class.findById(newTeacher.class);
+        oldClass.teacher = null;
+        await oldClass.save();
+      }
+      newTeacher.class = newClass._id;
+      await newTeacher.save();
+    }
+    await newClass.save();
     res.json({ class: newClass });
   } catch (error) {
     return errorHandler(
@@ -47,21 +58,27 @@ exports.updateClass = async (req, res, next) => {
   try {
     const newClass = await Class.findById(id);
     newClass.name = name;
+    await newClass.save();
     if (teacher != newClass.teacher) {
-      const oldTeacher = await Teacher.findById(newClass.teacher);
-      oldTeacher.class = null;
-      await oldTeacher.save();
-      const newTeacher = await Teacher.findById(teacher);
-      const oldClass = await Class.findById(newTeacher.class);
-      oldClass.teacher = null;
-      await oldClass.save();
-      newTeacher.class = id;
-      await newTeacher.save();
+      if (newClass.teacher) {
+        const oldTeacher = await Teacher.findById(newClass.teacher);
+        oldTeacher.class = null;
+        await oldTeacher.save();
+      }
+      if (teacher) {
+        const newTeacher = await Teacher.findById(teacher);
+        const oldClass = await Class.findById(newTeacher.class);
+        oldClass.teacher = null;
+        await oldClass.save();
+        newTeacher.class = id;
+        await newTeacher.save();
+      }
       newClass.teacher = teacher;
     }
     await newClass.save();
     res.json({ class: newClass });
   } catch (error) {
+    console.log(error);
     return errorHandler(
       Object.values(error?.errors)[0]?.properties?.message || error.message,
       error.status,
