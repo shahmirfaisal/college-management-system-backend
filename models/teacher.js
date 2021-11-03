@@ -18,9 +18,7 @@ const teacherSchema = new mongoose.Schema({
     required: [true, "Please provide date of birth!"],
   },
   cnic: {
-    type: Number,
-    min: [1000000000000, "Enter a valid cnic"],
-    max: [9999999999999, "Enter a valid cnic"],
+    type: String,
     required: [true, "Please provide the cnic!"],
   },
   joinDate: {
@@ -30,16 +28,23 @@ const teacherSchema = new mongoose.Schema({
   class: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Class",
+    default: null,
   },
   address: {
     type: String,
     required: [true, "Please enter the address!"],
   },
   phone: {
-    type: Number,
-    min: [10000000000, "Enter a valid phone number!"],
-    max: [99999999999, "Enter a valid phone number!"],
+    type: String,
     required: [true, "Please provide the phone number!"],
+  },
+  gender: {
+    type: String,
+    enum: {
+      values: ["MALE", "FEMALE"],
+      message: "{VALUE} is not supported!",
+    },
+    required: [true, "Please provide the gender!"],
   },
 });
 

@@ -4,7 +4,7 @@ const { errorHandler } = require("../utils");
 
 exports.getClasses = async (req, res, next) => {
   try {
-    const classes = await Class.find();
+    const classes = await Class.find().populate("teacher", "name").exec();
     res.json({ classes });
   } catch (error) {
     return errorHandler(error.message, error.status, next);
@@ -14,7 +14,9 @@ exports.getClasses = async (req, res, next) => {
 exports.getClass = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const newClass = await Class.findById(id);
+    const newClass = await Class.findById(id)
+      .populate("teacher", "name")
+      .exec();
     res.json({ class: newClass });
   } catch (error) {
     return errorHandler(error.message, error.status, next);

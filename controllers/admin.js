@@ -19,3 +19,7 @@ exports.login = (req, res, next) => {
   });
   res.json({ token });
 };
+
+exports.isLogin = (req, res, next) => {
+  res.json({ message: "Logged in!" });
+};

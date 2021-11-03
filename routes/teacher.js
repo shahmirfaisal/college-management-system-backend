@@ -4,6 +4,7 @@ const {
   getTeacher,
   createTeacher,
   updateTeacher,
+  deleteTeacher,
 } = require("../controllers/teacher");
 const checkAuth = require("../middlewares/checkAuth");
 
@@ -18,5 +19,8 @@ router.post("/", checkAuth, createTeacher);
 
 // Updating a teacher
 router.patch("/:id", checkAuth, updateTeacher);
+
+// Deleting a teacher
+router.delete("/:id", checkAuth, deleteTeacher);
 
 module.exports = router;
